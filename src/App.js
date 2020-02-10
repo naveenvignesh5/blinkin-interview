@@ -1,26 +1,31 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState, useCallback } from 'react';
 
-function App() {
+// components
+import TodoInput from './components/TodoInput';
+import TodoList from './components/TodoList';
+
+const App = () => {
+  const [, updateState] = useState();
+
+  const forceUpdate = useCallback(() => updateState({}), []);
+
+  useEffect(() => {
+    document.body.addEventListener("updated_list", forceUpdate);
+    
+    return function cleanup() {
+      document.body.removeEventListener("updated_list", forceUpdate);
+    };
+  });
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <section className="section">
+      <div className="container">
+        <TodoInput />
+        <TodoList />
+      </div>
+    </section>
   );
-}
+};
 
 export default App;
